@@ -353,7 +353,7 @@ class Mysql extends DboSource {
 				$fields[$column->Field]['unsigned'] = $this->_unsigned($column->Type);
 			}
 			if ($fields[$column->Field]['type'] === 'timestamp' && strtoupper($column->Default) === 'CURRENT_TIMESTAMP') {
-				$fields[$column->Field]['default'] = null;
+				$fields[$column->Field]['default'] = '';
 			}
 			if (!empty($column->Key) && isset($this->index[$column->Key])) {
 				$fields[$column->Field]['key'] = $this->index[$column->Key];
@@ -793,17 +793,6 @@ class Mysql extends DboSource {
 			return "set($vals)";
 		}
 		return 'text';
-	}
-
-/**
- * {@inheritDoc}
- */
-	public function value($data, $column = null) {
-		$value = parent::value($data, $column);
-		if (is_numeric($value) && substr($column, 0, 3) === 'set') {
-			return $this->_connection->quote($value);
-		}
-		return $value;
 	}
 
 /**

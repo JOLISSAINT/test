@@ -175,7 +175,7 @@ class ConsoleOptionParser {
 /**
  * Build a parser from an array. Uses an array like
  *
- * ```
+ * {{{
  * $spec = array(
  *		'description' => 'text',
  *		'epilog' => 'text',
@@ -189,7 +189,7 @@ class ConsoleOptionParser {
  *			// list of subcommands to add.
  *		)
  * );
- * ```
+ * }}}
  *
  * @param array $spec The spec to build the OptionParser with.
  * @return ConsoleOptionParser
@@ -521,7 +521,8 @@ class ConsoleOptionParser {
  * @return string Generated help.
  */
 	public function help($subcommand = null, $format = 'text', $width = 72) {
-		if (isset($this->_subcommands[$subcommand]) &&
+		if (
+			isset($this->_subcommands[$subcommand]) &&
 			$this->_subcommands[$subcommand]->parser() instanceof self
 		) {
 			$subparser = $this->_subcommands[$subcommand]->parser();

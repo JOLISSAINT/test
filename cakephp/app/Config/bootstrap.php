@@ -22,6 +22,10 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+
+
+
+
 // Setup a 'default' cache configuration for use in the application.
 Cache::config('default', array('engine' => 'File'));
 
@@ -71,12 +75,6 @@ Cache::config('default', array('engine' => 'File'));
  */
 
 /**
- * To prefer app translation over plugin translation, you can set
- *
- * Configure::write('I18n.preferApp', true);
- */
-
-/**
  * You can attach event listeners to the request lifecycle as Dispatcher Filter. By default CakePHP bundles two filters:
  *
  * - AssetDispatcher filter will serve your asset files (css, images, js, etc) from your themes and plugins
@@ -98,6 +96,18 @@ Configure::write('Dispatcher.filters', array(
 	'CacheDispatcher'
 ));
 
+$languages = array('fre','deu','ita');
+
+/*
+* Langue supporter par mon application 
+*/
+Configure::write('Config.languages', $languages);
+
+/*
+langage par défault
+ *  */
+Configure::write('Config.language','fre');
+
 /**
  * Configures default file logging options
  */
@@ -112,3 +122,5 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+

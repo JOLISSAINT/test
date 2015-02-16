@@ -235,7 +235,6 @@ class ModelValidator implements ArrayAccess, IteratorAggregate, Countable {
  *
  * @param string $options An optional array of custom options to be made available in the beforeValidate callback
  * @return array Array of invalid fields
- * @triggers Model.afterValidate $model
  * @see ModelValidator::validates()
  */
 	public function errors($options = array()) {
@@ -445,7 +444,6 @@ class ModelValidator implements ArrayAccess, IteratorAggregate, Countable {
  *
  * @param array $options Options to pass to callback.
  * @return bool
- * @triggers Model.beforeValidate $model, array($options)
  */
 	protected function _triggerBeforeValidate($options = array()) {
 		$model = $this->getModel();
@@ -535,7 +533,7 @@ class ModelValidator implements ArrayAccess, IteratorAggregate, Countable {
  *
  * ## Example:
  *
- * ```
+ * {{{
  *		$validator
  *			->add('title', 'required', array('rule' => 'notEmpty', 'required' => true))
  *			->add('user_id', 'valid', array('rule' => 'numeric', 'message' => 'Invalid User'))
@@ -544,7 +542,7 @@ class ModelValidator implements ArrayAccess, IteratorAggregate, Countable {
  *			'size' => array('rule' => array('lengthBetween', 8, 20)),
  *			'hasSpecialCharacter' => array('rule' => 'validateSpecialchar', 'message' => 'not valid')
  *		));
- * ```
+ * }}}
  *
  * @param string $field The name of the field where the rule is to be added
  * @param string|array|CakeValidationSet $name name of the rule to be added or list of rules for the field
@@ -580,11 +578,11 @@ class ModelValidator implements ArrayAccess, IteratorAggregate, Countable {
  *
  * ## Example:
  *
- * ```
+ * {{{
  *		$validator
  *			->remove('title', 'required')
  *			->remove('user_id')
- * ```
+ * }}}
  *
  * @param string $field The name of the field from which the rule will be removed
  * @param string $rule the name of the rule to be removed

@@ -162,7 +162,8 @@ class CakeRequest implements ArrayAccess {
 	protected function _processPost() {
 		if ($_POST) {
 			$this->data = $_POST;
-		} elseif (($this->is('put') || $this->is('delete')) &&
+		} elseif (
+			($this->is('put') || $this->is('delete')) &&
 			strpos(env('CONTENT_TYPE'), 'application/x-www-form-urlencoded') === 0
 		) {
 				$data = $this->_readInput();
@@ -260,7 +261,8 @@ class CakeRequest implements ArrayAccess {
 		}
 		$endsWithIndex = '/webroot/index.php';
 		$endsWithLength = strlen($endsWithIndex);
-		if (strlen($uri) >= $endsWithLength &&
+		if (
+			strlen($uri) >= $endsWithLength &&
 			substr($uri, -$endsWithLength) === $endsWithIndex
 		) {
 			$uri = '/';
@@ -758,11 +760,11 @@ class CakeRequest implements ArrayAccess {
  *
  * Get the list of accepted languages:
  *
- * ``` CakeRequest::acceptLanguage(); ```
+ * {{{ CakeRequest::acceptLanguage(); }}}
  *
  * Check if a specific language is accepted:
  *
- * ``` CakeRequest::acceptLanguage('es-es'); ```
+ * {{{ CakeRequest::acceptLanguage('es-es'); }}}
  *
  * @param string $language The language to test.
  * @return mixed If a $language is provided, a boolean. Otherwise the array of accepted languages.

@@ -553,10 +553,6 @@ class MysqlTest extends CakeTestCase {
 		$result = $this->Dbo->column('decimal(14,7) unsigned');
 		$expected = 'decimal';
 		$this->assertEquals($expected, $result);
-
-		$result = $this->Dbo->column("set('a','b','c')");
-		$expected = "set('a','b','c')";
-		$this->assertEquals($expected, $result);
 	}
 
 /**
@@ -914,16 +910,8 @@ SQL;
 			'alias' => 'TimestampDefaultValue'
 		));
 		$result = $this->Dbo->describe($model);
+		$this->assertEquals('', $result['limit_date']['default']);
 		$this->Dbo->execute('DROP TABLE ' . $name);
-
-		$this->assertNull($result['limit_date']['default']);
-
-		$schema = new CakeSchema(array(
-			'connection' => 'test',
-			'testdescribes' => $result
-		));
-		$result = $this->Dbo->createSchema($schema);
-		$this->assertContains('`limit_date` timestamp NOT NULL,', $result);
 	}
 
 /**
@@ -1283,7 +1271,7 @@ SQL;
  * @param Model $model
  * @param array $queryData
  * @param array $binding
- * @return array The prepared association query
+ * @return void
  */
 	protected function &_prepareAssociationQuery(Model $model, &$queryData, $binding) {
 		$type = $binding['type'];
@@ -2396,10 +2384,6 @@ SQL;
 		$expected = " WHERE ((`User`.`user` = 'mariano') OR (`User`.`user` = 'nate'))";
 		$this->assertEquals($expected, $result);
 
-		$result = $this->Dbo->conditions(array('User.user RLIKE' => 'mariano|nate'));
-		$expected = " WHERE `User`.`user` RLIKE 'mariano|nate'";
-		$this->assertEquals($expected, $result);
-
 		$result = $this->Dbo->conditions(array('or' => array(
 			'score BETWEEN ? AND ?' => array('4', '5'), 'rating >' => '20'
 		)));
@@ -3035,7 +3019,7 @@ SQL;
 		$this->assertSame($expected, $result);
 
 		$result = $this->Dbo->length(false);
-		$this->assertNull($result);
+		$this->assertTrue($result === null);
 
 		$result = $this->Dbo->length('datetime');
 		$expected = null;
@@ -3467,10 +3451,9 @@ SQL;
 		$test->getLog();
 		$result = $Article->find('all', compact('conditions', 'contain'));
 
-		$expected = 'SELECT `Comment`.`id`, `Comment`.`article_id`, `Comment`.`user_id`, `Comment`.`comment`,' .
-			' `Comment`.`published`, `Comment`.`created`,' .
+		$expected = 'SELECT `Comment`.`id`, `Comment`.`article_id`, `Comment`.`user_id`, `Comment`.`comment`, `Comment`.`published`, `Comment`.`created`,' .
 			' `Comment`.`updated`, (SELECT id FROM comments WHERE id = (SELECT 1)) AS  `Comment__extra`' .
-			' FROM ' . $test->fullTableName('comments') . ' AS `Comment`   WHERE `Comment`.`article_id` IN (1, 2)';
+			' FROM `cakephp_test`.`comments` AS `Comment`   WHERE `Comment`.`article_id` IN (1, 2)';
 
 		$log = $test->getLog();
 		$this->assertTextEquals($expected, $log['log'][count($log['log']) - 2]['query']);
@@ -4073,23 +4056,6 @@ SQL;
 		$this->assertNotEmpty($model->read(null, 1));
 
 		$this->Dbo->useNestedTransactions = $nested;
-	}
-
-/**
- * Test that value() quotes set values even when numeric.
- *
- * @return void
- */
-	public function testSetValue() {
-		$column = "set('a','b','c')";
-		$result = $this->Dbo->value('1', $column);
-		$this->assertEquals("'1'", $result);
-
-		$result = $this->Dbo->value(1, $column);
-		$this->assertEquals("'1'", $result);
-
-		$result = $this->Dbo->value('a', $column);
-		$this->assertEquals("'a'", $result);
 	}
 
 }

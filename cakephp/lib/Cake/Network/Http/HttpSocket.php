@@ -139,12 +139,12 @@ class HttpSocket extends CakeSocket {
  *
  * Or use an array to configure multiple options:
  *
- * ```
+ * {{{
  * $http = new HttpSocket(array(
  *    'host' => 'cakephp.org',
  *    'timeout' => 20
  * ));
- * ```
+ * }}}
  *
  * See HttpSocket::$config for options that can be used.
  *
@@ -169,21 +169,21 @@ class HttpSocket extends CakeSocket {
  * Accepts two forms of parameters. If all you need is a username + password, as with
  * Basic authentication you can do the following:
  *
- * ```
+ * {{{
  * $http->configAuth('Basic', 'mark', 'secret');
- * ```
+ * }}}
  *
  * If you are using an authentication strategy that requires more inputs, like Digest authentication
  * you can call `configAuth()` with an array of user information.
  *
- * ```
+ * {{{
  * $http->configAuth('Digest', array(
  *		'user' => 'mark',
  *		'pass' => 'secret',
  *		'realm' => 'my-realm',
  *		'nonce' => 1235
  * ));
- * ```
+ * }}}
  *
  * To remove any set authentication strategy, call `configAuth()` with no parameters:
  *
@@ -312,7 +312,8 @@ class HttpSocket extends CakeSocket {
 			if (isset($this->request['uri']['port'])) {
 				$port = $this->request['uri']['port'];
 			}
-			if (($scheme === 'http' && $port != 80) ||
+			if (
+				($scheme === 'http' && $port != 80) ||
 				($scheme === 'https' && $port != 443) ||
 				($port != 80 && $port != 443)
 			) {
@@ -439,12 +440,12 @@ class HttpSocket extends CakeSocket {
  *
  * You could express the same thing using a uri array and query string parameters:
  *
- * ```
+ * {{{
  * $response = $http->get(
  *     array('host' => 'google.com', 'path' => '/search'),
  *     array('q' => 'cakephp', 'client' => 'safari')
  * );
- * ```
+ * }}}
  *
  * @param string|array $uri URI to request. Either a string uri, or a uri array, see HttpSocket::_parseUri()
  * @param array $query Querystring parameters to append to URI
@@ -497,12 +498,12 @@ class HttpSocket extends CakeSocket {
  *
  * `post()` can be used to post simple data arrays to a URL:
  *
- * ```
+ * {{{
  * $response = $http->post('http://example.com', array(
  *     'username' => 'batman',
  *     'password' => 'bruce_w4yne'
  * ));
- * ```
+ * }}}
  *
  * @param string|array $uri URI to request. See HttpSocket::_parseUri()
  * @param array $data Array of request body data keys and values.
@@ -563,10 +564,10 @@ class HttpSocket extends CakeSocket {
  * After configuring part of the request parameters, you can use url() to generate
  * URLs.
  *
- * ```
+ * {{{
  * $http = new HttpSocket('http://www.cakephp.org');
  * $url = $http->url('/search?q=bar');
- * ```
+ * }}}
  *
  * Would return `http://www.cakephp.org/search?q=bar`
  *
@@ -906,10 +907,11 @@ class HttpSocket extends CakeSocket {
  * Builds a request line according to HTTP/1.1 specs. Activate quirks mode to work outside specs.
  *
  * @param array $request Needs to contain a 'uri' key. Should also contain a 'method' key, otherwise defaults to GET.
+ * @param string $versionToken The version token to use, defaults to HTTP/1.1
  * @return string Request line
  * @throws SocketException
  */
-	protected function _buildRequestLine($request = array()) {
+	protected function _buildRequestLine($request = array(), $versionToken = 'HTTP/1.1') {
 		$asteriskMethods = array('OPTIONS');
 
 		if (is_string($request)) {
@@ -935,8 +937,7 @@ class HttpSocket extends CakeSocket {
 		if (!$this->quirksMode && $request['uri'] === '*' && !in_array($request['method'], $asteriskMethods)) {
 			throw new SocketException(__d('cake_dev', 'HttpSocket::_buildRequestLine - The "*" asterisk character is only allowed for the following methods: %s. Activate quirks mode to work outside of HTTP/1.1 specs.', implode(',', $asteriskMethods)));
 		}
-		$version = isset($request['version']) ? $request['version'] : '1.1';
-		return $request['method'] . ' ' . $request['uri'] . ' HTTP/' . $version . "\r\n";
+		return $request['method'] . ' ' . $request['uri'] . ' ' . $versionToken . "\r\n";
 	}
 
 /**

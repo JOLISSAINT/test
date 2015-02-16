@@ -14,14 +14,13 @@
 
 App::uses('Security', 'Utility');
 App::uses('Hash', 'Utility');
-App::uses('CakeEventListener', 'Event');
 
 /**
  * Base Authentication class with common methods and properties.
  *
  * @package       Cake.Controller.Component.Auth
  */
-abstract class BaseAuthenticate implements CakeEventListener {
+abstract class BaseAuthenticate {
 
 /**
  * Settings for this object.
@@ -65,15 +64,6 @@ abstract class BaseAuthenticate implements CakeEventListener {
  * @var AbstractPasswordHasher
  */
 	protected $_passwordHasher;
-
-/**
- * Implemented events
- *
- * @return array of events => callbacks.
- */
-	public function implementedEvents() {
-		return array();
-	}
 
 /**
  * Constructor

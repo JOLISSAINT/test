@@ -30,5 +30,24 @@ App::uses('Controller', 'Controller');
  * @package		app.Controller
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
+
 class AppController extends Controller {
+/*  En fonction de la langue traduits le texte*/
+    function beforeFilter() {
+        // Met la langue par défault dans la session
+        
+        if(!$this->Session->read('User.language')){
+            $this->Session->write('User.language',Configure::read('Config.language'));    
+        }
+        
+        /*Test si le paramètre langage et renseigner et existant (défini par l'url) */
+        if (isset($this->params['language'])){
+            if(in_array($this->params['language'], Configure::read('Config.languages'))){
+                $this->Session->write('User.language',$this->params['language']);
+            }
+        }
+        // Défini le language
+        Configure::write('Config.language',$this->Session->read('User.language'));    
+        $this->params['language']= $this->Session->read('User.language');
+    }
 }
